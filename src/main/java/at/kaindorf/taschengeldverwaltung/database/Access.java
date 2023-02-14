@@ -176,7 +176,7 @@ public class Access {
         Statement statement = dbInstance.getStatement();
         String sqlString = "SELECT \"BenutzerID\"\n" +
                 "FROM \"Benutzer\"\n" +
-                "WHERE \"Benutzername\" = 'admin';";
+                "WHERE \"Benutzername\" = "+ username+";";
 
         ResultSet results = statement.executeQuery(sqlString);
         results.next();
