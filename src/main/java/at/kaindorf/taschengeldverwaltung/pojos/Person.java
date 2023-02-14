@@ -16,6 +16,11 @@ public class Person {
     private String titleAfter;
     private Salutation salutation;
 
+    public Person(@NonNull Long id, String firstName, String lastName) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
 
     @Override
     public String toString() {

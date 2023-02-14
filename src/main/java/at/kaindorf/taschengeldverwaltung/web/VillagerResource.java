@@ -82,23 +82,38 @@ public class VillagerResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/getSaldenliste")
-    public Response getSaldenliste() {
-        return null;
+    @Path("/getBalanceList")
+    public Response getBalanceList() {
+
+        try {
+
+            return Response.ok(access.getBalanceList()).build();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/getBuchungsjournal")
-    public Response getBuchungsjournal(@QueryParam("personId") Long personId) {
-        return null;
+    @Path("/getAccountingJournal")
+    public Response getAccountingJournal() {
+        try {
+            return Response.ok(access.getAccountingJournal(null)).build();
+        } catch (SQLException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(e).build();
+        }
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/getDepotauskuenfte")
-    public Response getDepotauskuenfte() {
-        return null;
+    @Path("/getDepotInformations")
+    public Response getDepotInformations(@QueryParam("personId") Long personId) {
+        try {
+            return Response.ok(access.getAccountingJournal(personId)).build();
+        } catch (SQLException e) {
+            return Response.status(Response.Status.NOT_FOUND).entity(e).build();
+        }
     }
 
     @GET

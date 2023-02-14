@@ -8,9 +8,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Access {
 
@@ -203,18 +202,120 @@ public class Access {
         dbInstance.releaseStatement(statement);
     }
 
+    public BalanceOverview getBalanceList() throws SQLException {
+
+        String sqlString = "SELECT *\n" +
+                "FROM \"Buchung\" b\n" +
+                "    INNER JOIN \"Person\" be ON b.\"BewohnerID\" = be.\"PersonID\"\n" +
+                "    INNER JOIN \"Zweck\" z ON b.\"ZweckID\" = z.\"ZweckID\";";
+
+        Statement statement = dbInstance.getStatement();
+
+        ResultSet results = statement.executeQuery(sqlString);
+        Map<Person, Double> balanceMap = new HashMap<>();
+
+
+        while (results.next()){
+            Person person = new Person(
+                    results.getLong("BewohnerID"),
+                    results.getString("Vorname"),
+                    results.getString("Nachname"));
+
+            if (balanceMap.containsKey(person)){
+                Double balance = balanceMap.get(person);
+                balance += (results.getDouble("Betrag") * results.getShort("Multiplikator"));
+                balanceMap.put(person,balance);
+                continue;
+            }
+
+            balanceMap.put(person, (results.getDouble("Betrag") * results.getShort("Multiplikator")));
+        }
+        dbInstance.releaseStatement(statement);
+
+        List<Balance> balanceList = new ArrayList<>();
+
+        for (Person person : balanceMap.keySet()){
+            balanceList.add(new Balance(person.getId(), person.getFirstName(),
+                    person.getLastName(), balanceMap.get(person)));
+        }
+
+        return new BalanceOverview(getOverallBalance(balanceList), balanceList);
+    }
+
+    private Double getOverallBalance(List<Balance> balanceList) {
+        return balanceList.stream()
+                .mapToDouble(b -> b.getBalance())
+                .sum();
+    }
+
+    public BalanceOverview getAccountingJournal(Long personId) throws SQLException {
+        String sqlString = "SELECT *\n" +
+                "FROM \"Buchung\" b\n" +
+                "    INNER JOIN \"Person\" be ON b.\"BewohnerID\" = be.\"PersonID\"\n" +
+                "    INNER JOIN \"Zweck\" z ON b.\"ZweckID\" = z.\"ZweckID\";";
+
+        Statement statement = dbInstance.getStatement();
+
+        ResultSet results = statement.executeQuery(sqlString);
+        List<Balance> balanceList = new ArrayList<>();
+        BalanceOverview balanceOverview = new BalanceOverview(0.0,0.0,0.0);
+
+        while (results.next()){
+            Double value = (results.getDouble("Betrag") * results.getShort("Multiplikator"));
+
+            balanceList.add(new Balance(
+                        results.getLong("BewohnerID"),
+                        results.getString("Vorname"),
+                        results.getString("Nachname"),
+                        value,
+                        results.getLong("BelegNr"),
+                        results.getDate("Datum").toLocalDate(),
+                        results.getString("Text")
+            ));
+
+            balanceOverview.setSum(balanceOverview.getSum()+value);
+            if (value<0){
+                balanceOverview.setExpenses(balanceOverview.getExpenses()+value);
+                continue;
+            }
+            balanceOverview.setIncome(balanceOverview.getIncome()+value);
+        }
+        dbInstance.releaseStatement(statement);
+        if (personId != null){
+            balanceList = balanceList.stream()
+                    .filter(balance -> balance.getVillagerId().equals(personId))
+                    .collect(Collectors.toList());
+        }
+        balanceOverview.setBalanceList(balanceList);
+        return balanceOverview;
+    }
+
+
+//    public static void main(String[] args) {
+//        short kurz = -1;
+//        try {
+//            getTheInstance().insertFastBooking(123L,new Booking(123L,LocalDateTime.now(),"admin", 463.99f,10L, "frische Sneaks", new Purpose(2L, "", kurz, true)));
+////            getTheInstance().getBalanceList().forEach(System.out::println);
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//
+//    }
 
     public static void main(String[] args) {
-        short kurz = -1;
         try {
-//            getTheInstance().insertFastBooking(50L,new Booking(LocalDateTime.now(),"admin", 9.50f,3L, "asdkfaljfa", new Purpose(1L, "Apotheke", kurz, true)));
-            getTheInstance().getAllVillagersBookingHistory("date").forEach(System.out::println);
+            BalanceOverview ba = getTheInstance().getAccountingJournal(null);
+            System.out.println(ba);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
-//        LocalDateTime ld = LocalDateTime.now();
+    }
+
+
+
+//    LocalDateTime ld = LocalDateTime.now();
 //        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 //        System.out.println(ld.format(dtf));
-    }
 }
