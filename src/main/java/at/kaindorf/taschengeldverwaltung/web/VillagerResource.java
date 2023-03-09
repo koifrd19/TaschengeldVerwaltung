@@ -9,7 +9,7 @@ import jakarta.ws.rs.core.Response;
 
 import java.sql.SQLException;
 
-@Path("/villagers")
+@Path("/villager")
 public class VillagerResource {
 
     private Access access = Access.getTheInstance().getTheInstance();
@@ -17,12 +17,12 @@ public class VillagerResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/getAllVillagers")
+    @Path("/getAllVillager")
     public Response getAllVillagers(){
         try {
             return Response.ok(access.getAllVillagers()).build();
         } catch (SQLException e) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
 
@@ -31,7 +31,7 @@ public class VillagerResource {
     @Path("/getVillager")
     public Response getVillager(@QueryParam("personId") Long personId) {
         try {
-            return Response.ok(access.getPersonOfTrustById(personId)).build();
+            return Response.ok(access.getVillagerById(personId)).build();
         } catch (SQLException e) {
             return Response.status(Response.Status.NOT_FOUND).entity(e).build();
         }
@@ -53,6 +53,7 @@ public class VillagerResource {
     @Path("/getAllBookingHistory")
     public Response getAllBookingHistory(@QueryParam("sortedBy") String sortedBy) {
         try {
+            sortedBy="date";
             return Response.ok(access.getAllVillagersBookingHistory(sortedBy)).build();
         } catch (SQLException e) {
             return Response.status(Response.Status.NOT_FOUND).entity(e).build();

@@ -17,7 +17,7 @@ public class TrustedPerson extends Person {
     private String street;
     private String houseNr;
     private Relation relation;
-    private TransmitionMethod method;
+    private TransmissionMethod method;
 
     @Override
     public String toString() {
@@ -39,7 +39,7 @@ public class TrustedPerson extends Person {
                 '}';
     }
 
-    public TrustedPerson(@NonNull Long id, String firstName, String lastName, String titleBefore, String titleAfter, Salutation salutation, String email, String telNr, String town, String zipCode, String street, String houseNr, Relation relation, TransmitionMethod method) {
+    public TrustedPerson(@NonNull Long id, String firstName, String lastName, String titleBefore, String titleAfter, Salutation salutation, String email, String telNr, String town, String zipCode, String street, String houseNr, Relation relation, TransmissionMethod method) {
         super(id, firstName, lastName, titleBefore, titleAfter, salutation);
         this.email = email;
         this.telNr = telNr;
@@ -50,4 +50,6 @@ public class TrustedPerson extends Person {
         this.relation = relation;
         this.method = method;
     }
+
+
 }

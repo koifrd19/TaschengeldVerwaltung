@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class TransmitionMethod {
+public class TransmissionMethod {
 
     private long id;
     private String method;

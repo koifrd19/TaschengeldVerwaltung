@@ -89,10 +89,40 @@ public class Access {
                             results.getInt("BeziehungsID"),
                             results.getString(19)
                     ),
-                    new TransmitionMethod(
+                    new TransmissionMethod(
                             results.getLong("VersandartID"),
                             results.getString(17)
                     ));
+    }
+
+    public VillagerPerson getVillagerById(Long id) throws SQLException {
+        Statement statement = dbInstance.getStatement();
+
+        String sqlString = "SELECT *\n" +
+                "FROM \"Person\" p INNER JOIN \"Bewohner\" vp ON p.\"PersonID\" = vp.\"VertrauenspersonID\"\n" +
+                "                INNER JOIN \"Versandart\" v ON vp.\"Versandart\" = v.\"VersandartID\"\n" +
+                "                INNER JOIN \"Anrede\" a ON p.\"AnredeID\" = a.\"AnredeID\"" +
+                "WHERE p.\"PersonID\" = "+ id+ ";\n";
+
+        ResultSet results = statement.executeQuery(sqlString);
+
+        dbInstance.releaseStatement(statement);
+        results.next();
+
+
+        return new VillagerPerson(results.getLong("PersonID"),
+                results.getString("Vorname"),
+                results.getString("Nachname"),
+                results.getString("TitelVor"),
+                results.getString("TitelNach"),
+                new Salutation(results.getLong("AnredeID"), results.getString(21)),
+                results.getString("short_sign"),
+                results.getDate("date_of_birth").toLocalDate(),
+                results.getDate("date_of_exit").toLocalDate(),
+                results.getString("note"),
+                new Person(results.getLong("person_id")),
+                new ArrayList<>()
+                );
     }
 
     public Booking getBookingById(){
@@ -291,27 +321,27 @@ public class Access {
     }
 
 
-//    public static void main(String[] args) {
-//        short kurz = -1;
-//        try {
-//            getTheInstance().insertFastBooking(123L,new Booking(123L,LocalDateTime.now(),"admin", 463.99f,10L, "frische Sneaks", new Purpose(2L, "", kurz, true)));
-////            getTheInstance().getBalanceList().forEach(System.out::println);
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//
-//    }
-
     public static void main(String[] args) {
+        short kurz = -1;
         try {
-            BalanceOverview ba = getTheInstance().getAccountingJournal(null);
-            System.out.println(ba);
+//            getTheInstance().insertFastBooking(62L,new Booking(62L,LocalDateTime.now(),"'admin'", 99.99f,11L, "", new Purpose(5L, "", kurz, true)));
+//            getTheInstance().getBalanceList().forEach(System.out::println);
+            System.out.println(getTheInstance().getBalanceList());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
+
     }
+
+//    public static void main(String[] args) {
+//        try {
+//            getTheInstance().getAllVillagersBookingHistory("date").forEach(System.out::println);
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//    }
 
 
 
