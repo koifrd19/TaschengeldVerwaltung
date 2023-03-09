@@ -42,7 +42,7 @@ function loadOverview() {
 // TODO: Kontostand fehlt im Backend + Wo soll weiterleitung zu Stammdaten sein (echt firstname??)
 function displayOverview(villagers) {
     let html = '<tr><th></th><th>Vorname</th><th>Nachname</th><th>Kürzel</th><th>Kontostand</th><th>Buchungsverlauf</th></tr>';
-    for (let villager in villagers) {
+    for (const villager in villagers) {
         html += `<tr><td>${villager.id}</td><td>${villager.firstName}</td><td>${villager.lastName}</td><td>${villager.shortSign}</td><td>${villager.balance}</td><td><a href='./villager_history.html?id=${villager.id}'>Buchungsverlauf</a></td></tr>`;
     }
     document.getElementById('uebersichtTabelle').innerHTML = html;
