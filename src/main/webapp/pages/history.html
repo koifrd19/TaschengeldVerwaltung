@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width-device-width, initial-scale-1'>
+    <title>Buchungen Gesmat</title>
+    <link rel='stylesheet' href='../css/bulma.css'>
+    <link rel='stylesheet' href='../css/general.css'>
+    <script src='../script/javascript.js'></script>
+</head>
+<body>
+    <!-- Header der Seite -->
+    <section class='hero'>
+        <div class='columns is-variable is-3 is-centered generalHeader'>
+            <div id='ubersichtHeader' class='column is-2 unselected-header' onclick=''>
+                <a href='./overview.html'>
+                    Übersicht
+                </a>
+            </div>
+            <div id='buchHeader' class='column is-2 selected-header'>
+                <p>
+                    Buchungen
+                </p>
+            </div>
+        </div>
+    </section>
+    <div style='position: absolute; top:3px; left:3px;'>
+        <img src='../resources/logo.png'>
+    </div>
+    <!-- User Drop-Down -->
+    <div class='dropdown is-right is-active' style='position: absolute; top:3px; right:3px;'>
+        <div class='dropdown-trigger'>
+            <button class='button' aria-haspopup='true' aria-controls='dropdown-menu6'>
+                <span>Benutzerverwaltung</span>
+            </button>
+        </div>
+        <div class='dropdown-menu' id='dropdown-menu6' role='menu'>
+            <div class='dropdown-content'>
+                <div class='dropdown-item'>
+                    <p>Admin-Bereich</p>
+                </div>
+                <div class='dropdown-item'>
+                    <p>Abmelden</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Content der Seite -->
+    </br></br></br>
+    <section>
+        <div class='columns is-centered'>
+            <div class='column is-11'>
+                <table id='buchTabelle' style='width:100%'>
+                </table>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

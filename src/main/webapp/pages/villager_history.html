@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width-device-width, initial-scale-1'>
+    <title>Buchungen</title>
+    <link rel='stylesheet' href='../css/bulma.css'>
+    <link rel='stylesheet' href='../css/general.css'>
+</head>
+<body>
+    <!-- Header der Seite -->
+    <section class='hero'>
+        <div class='columns is-variable is-3 is-centered generalHeader'>
+            <div id='ubersichtHeader' class='column is-2 unselected-header' onclick=''>
+                <a href='./overview.html'>
+                    Übersicht
+                </a>
+            </div>
+            <div id='buchHeader' class='column is-2 unselected-header'>
+                <a href='./history.html'>
+                    Buchungen
+                </a>
+            </div>
+        </div>
+    </section>
+    <div style='position: absolute; top:3px; left:3px;'>
+        <img src='../resources/logo.png'>
+    </div>
+    <!-- User Drop-Down -->
+    <div class='dropdown is-right is-active' style='position: absolute; top:3px; right:3px;'>
+        <div class='dropdown-trigger'>
+            <button class='button' aria-haspopup='true' aria-controls='dropdown-menu6'>
+                <span>Benutzerverwaltung</span>
+            </button>
+        </div>
+        <div class='dropdown-menu' id='dropdown-menu6' role='menu'>
+            <div class='dropdown-content'>
+                <div class='dropdown-item'>
+                    <p>Admin-Bereich</p>
+                </div>
+                <div class='dropdown-item'>
+                    <p>Abmelden</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Content der Seite -->
+    <br /><br />
+    <!-- Stammdaten Header -->
+    <section class='hero'>
+        <div class='columns is-centered'>
+            <div class='column is-6 columns is-centered indiHeader'>
+                <div id='indiHeaderName' class='column is-3'>
+                    <strong style='align-self: center; font-size: large; color:white;'> Max Mustermann: </strong>
+                </div>
+                <div id='indiStammHeader' class='column is-4 unselected-header'>
+                    <a href='./villager_trunkdata.html'>Stammdaten</a>
+                </div>
+                <div id='indiBuchHeader' class='column is-4 selected-header' onclick='buchen()'>
+                    <p>Buchungen</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Buchungen -->
+    <br /><br /><br />
+    <section>
+        <div class='columns is-centered'>
+            <div class='column is-11'>
+                <table id='buchTabelle' style='width:100%'>
+                    <tr><th></th><th>BuchungsNR</th><th>Zweck</th><th>Anmerkung</th><th>Betrag</th><th>Kontostand</th></tr>
+                    <tr><td><button onclick=''>Schnellbuchung:</button></td><td><input class='input' id='buchungsNR'></td><td><input class='input' id='zweck'></td><td><input class='input' id='anmerkung'></td><td><input class='input' id='betrag'></td><td></td></tr>
+                </table>
+            </div>
+        </div>
+    </section>
+    <!-- Export Drop-Up -->
+    <div class='button generalButton' style='position: fixed; bottom:20px; right:10px; width:150px; height:40px;'>Depotauskunft</div>
+</body>
+</html>

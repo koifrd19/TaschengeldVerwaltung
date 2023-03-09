@@ -1,0 +1,73 @@
+.unselected-header {
+    color: #8e8e8e;
+}
+.selected-header, .unselected-header:hover {
+    background-color: rgba(241,237,255,0.5);
+    color: #ffffff;
+    border-radius: 25px;
+}    
+.unselected-header, .selected-header, .unavailable{
+    text-align: center;
+    font-size: 25px;
+}
+
+.formText {
+    color: black;
+}
+.generalButton {
+    border-radius: 5px;
+    color: white;
+    background-color: #524f64;
+}
+table, th, td {
+    border: 1px solid;
+}
+
+.dropbtn {
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+}
+
+.dropup {
+    position: relative;
+    display: inline-block;
+}
+
+.dropup-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    bottom: 40px;
+    z-index: 1;
+}
+
+.dropup-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropup-content a:hover {background-color: #ccc}
+
+.dropup:hover .dropup-content {
+    display: block;
+}
+
+.dropup:hover .dropbtn {
+    border-radius: 10px;
+}
+.generalHeader {
+    background-color: rgba(152,144,184,0.46);
+}
+.indiHeader {
+    background-color: #77748c;
+    color: black;
+    border-radius: 35px;
+}
+
+a, a:hover, a::after {
+    color: #8e8e8e;
+}
