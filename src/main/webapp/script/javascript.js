@@ -39,9 +39,10 @@ function loadOverview() {
         });
 };
 
-// TODO: Kontostand fehlt im Backend + Wo soll weiterleitung zu Stammdaten sein (echt firstname??)
+// TODO: Kontostand fehlt im Backend + Wo soll weiterleitung zu Stammdaten sein (echt firstname??) NEIN: first_name
 function displayOverview(villagers) {
     let html = '<tr><th></th><th>Vorname</th><th>Nachname</th><th>Kürzel</th><th>Kontostand</th><th>Buchungsverlauf</th></tr>';
+    console.log(villagers);
     for (let villager in villagers) {
         html += `<tr><td>${villager.id}</td><td>${villager.firstName}</td><td>${villager.lastName}</td><td>${villager.shortSign}</td><td>KONTOSTAND</td><td><a href='./villager_history.html?id=${villager.id}'>Buchungsverlauf</a></td></tr>`;
     }
