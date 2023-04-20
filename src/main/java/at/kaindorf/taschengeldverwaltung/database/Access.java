@@ -45,7 +45,7 @@ public class Access {
                     results.getString("lastname"),
                     results.getString("title_before"),
                     results.getString("title_after"),
-                    new Salutation(results.getLong("salutation_id"), results.getString("Bezeichnung")),
+                    new Salutation(results.getLong("salutation_id"), results.getString("salutation_text")),
                     results.getString("short_sign"),
                     results.getDate("date_of_birth").toLocalDate(),
                     results.getDate("date_of_exit").toLocalDate(),
@@ -56,23 +56,13 @@ public class Access {
         dbInstance.releaseStatement(statement);
         return villagerPeople;
     }
-
-    public static void main(String[] args) {
-        try {
-
-            System.out.println(getTheInstance().getPersonOfTrustById(523L));
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public TrustedPerson getPersonOfTrustById(Long id) throws SQLException {
         Statement statement = dbInstance.getStatement();
 
         String sqlString = "SELECT *\n" +
-                "FROM \"person\" p INNER JOIN \"Vertrauensperson\" vp ON p.\"person_id\" = vp.\"trusted_person_id\"\n" +
+                "FROM \"person\" p INNER JOIN \"trusted_person\" vp ON p.\"person_id\" = vp.\"trusted_person_id\"\n" +
                 "                INNER JOIN \"transmission_method\" v ON vp.\"transmission_method\" = v.\"transmission_method_id\"\n" +
-                "                INNER JOIN \"Beziehung\" b ON vp.\"Beziehung\" = b.\"BeziehungsID\"" +
+                "                INNER JOIN \"relation\" b ON vp.\"relation\" = b.\"relation_id\"" +
                 "                INNER JOIN \"salutation\" a ON p.\"salutation_id\" = a.\"salutation_id\"" +
                 "WHERE p.\"person_id\" = "+ id+ ";\n";
 
@@ -88,14 +78,14 @@ public class Access {
                     results.getString("title_before"),
                     results.getString("title_after"),
                     new Salutation(results.getLong("salutation_id"), results.getString(21)),
-                    results.getString("EMail"),
-                    results.getString("Telefonnummer"),
-                    results.getString("Ort"),
-                    results.getString("PLZ"),
-                    results.getString("Strasse"),
-                    results.getString("Hausnummer"),
+                    results.getString("email"),
+                    results.getString("tel_nr"),
+                    results.getString("town"),
+                    results.getString("zip_code"),
+                    results.getString("street"),
+                    results.getString("house_nr"),
                     new Relation(
-                            results.getInt("BeziehungsID"),
+                            results.getInt("relation_id"),
                             results.getString(19)
                     ),
                     new TransmissionMethod(
@@ -107,11 +97,15 @@ public class Access {
     public VillagerPerson getVillagerById(Long id) throws SQLException {
         Statement statement = dbInstance.getStatement();
 
-        String sqlString = "SELECT *\n" +
-                "FROM \"person\" p INNER JOIN \"villager\" vp ON p.\"person_id\" = vp.\"trusted_person_id\"\n" +
-                "                INNER JOIN \"transmission_method\" v ON vp.\"transmission_method\" = v.\"transmission_method_id\"\n" +
-                "                INNER JOIN \"salutation\" a ON p.\"salutation_id\" = a.\"salutation_id\"" +
-                "WHERE p.\"person_id\" = "+ id+ ";\n";
+//        String sqlString = "SELECT *\n" +
+//                "FROM \"person\" p INNER JOIN \"villager\" vp ON p.\"person_id\" = vp.\"villager_id\"\n" +
+//                "                INNER JOIN \"transmission_method\" v ON vp.\"transmission_method\" = v.\"transmission_method_id\"\n" +
+//                "                INNER JOIN \"salutation\" a ON p.\"salutation_id\" = a.\"salutation_id\"" +
+//                "WHERE p.\"person_id\" = "+ id+ ";\n";
+
+        String sqlString = "SELECT * FROM person p INNER JOIN villager vp ON p.person_id = vp.villager_id\n" +
+                "INNER JOIN salutation a ON p.salutation_id = a.salutation_id\n" +
+                "WHERE p.person_id = 187;";
 
         ResultSet results = statement.executeQuery(sqlString);
 
@@ -124,7 +118,7 @@ public class Access {
                 results.getString("lastname"),
                 results.getString("title_before"),
                 results.getString("title_after"),
-                new Salutation(results.getLong("salutation_id"), results.getString(21)),
+                new Salutation(results.getLong("salutation_id"), results.getString("salutation_text")),
                 results.getString("short_sign"),
                 results.getDate("date_of_birth").toLocalDate(),
                 results.getDate("date_of_exit").toLocalDate(),
@@ -144,7 +138,7 @@ public class Access {
 
         String sqlString = "SELECT *\n" +
                 "FROM \"booking\" b\n" +
-                "    INNER JOIN \"user\" ON b.\"user\" = \"user_id\"\n" +
+                "    INNER JOIN \"tgv_user\" usr ON b.\"user_id\" = usr.\"user_id\"\n" +
                 "    INNER JOIN \"purpose\" z ON b.\"purpose_id\" = z.\"purpose_id\"" +
                 "WHERE \"villager_id\" = "+ personId+ ";";
 
@@ -153,8 +147,8 @@ public class Access {
         while (results.next()){
             bookings.add(
                     new Booking(results.getLong("villager_id"),
-                            results.getDate("date").toLocalDate()
-                            .atTime(results.getTime("date").toLocalTime()),
+                            results.getDate("date_of_booking").toLocalDate()
+                            .atTime(results.getTime("date_of_booking").toLocalTime()),
                             results.getString("username"),
                             results.getFloat("amount"),
                             results.getLong("receipt_nr"),
@@ -163,7 +157,7 @@ public class Access {
                                     results.getLong("purpose_id"),
                                     results.getString("text"),
                                     results.getShort("multiplier"),
-                                    results.getBoolean("Status"))
+                                    results.getBoolean("status"))
                             )
             );
         }
@@ -179,7 +173,7 @@ public class Access {
 
         String sqlString = "SELECT *\n" +
                 "FROM \"booking\" b\n" +
-                "    INNER JOIN \"Benutzer\" ON b.\"user\" = \"user_id\"\n" +
+                "    INNER JOIN \"user\" usr ON b.\"user_id\" = usr.\"user_id\"\n" +
                 "    INNER JOIN \"purpose\" z ON b.\"purpose_id\" = z.\"purpose_id\"";
 
         ResultSet results = statement.executeQuery(sqlString);
@@ -187,8 +181,8 @@ public class Access {
         while (results.next()){
             bookings.add(
                     new Booking(results.getLong("villager_id"),
-                            results.getDate("date").toLocalDate()
-                            .atTime(results.getTime("date").toLocalTime()),
+                            results.getDate("date_of_booking").toLocalDate()
+                            .atTime(results.getTime("date_of_booking").toLocalTime()),
                             results.getString("username"),
                             results.getFloat("amount"),
                             results.getLong("receipt_nr"),
@@ -214,8 +208,8 @@ public class Access {
     private Long getIdOfUser(String username) throws SQLException {
         Statement statement = dbInstance.getStatement();
         String sqlString = "SELECT \"user_id\"\n" +
-                "FROM \"user\"\n" +
-                "WHERE \"username\" = "+ username+";";
+                "FROM \"tgv_user\"\n" +
+                "WHERE \"username\" = '"+ username+"';";
 
         ResultSet results = statement.executeQuery(sqlString);
         results.next();
@@ -227,7 +221,7 @@ public class Access {
         LocalDateTime dateOfBooking = booking.getDateTime();
 
         String sqlString = String.format("INSERT INTO public.\"booking\"(\n" +
-                "    \"villager_id\", \"date\", \"purpose_id\", \"amount\", \"receipt_nr\", \"note\", \"user\")\n" +
+                "    \"villager_id\", \"date_of_booking\", \"purpose_id\", \"amount\", \"receipt_nr\", \"note\", \"user_id\")\n" +
                 "VALUES (%d, '%s', %d, %f, %d, '%s', %s);", personId, dateOfBooking.format(DTF),
                 booking.getPurpose().getId(),
                 booking.getValue(),
@@ -308,7 +302,7 @@ public class Access {
                         results.getString("lastname"),
                         value,
                         results.getLong("receipt_nr"),
-                        results.getDate("date").toLocalDate(),
+                        results.getDate("date_of_booking").toLocalDate(),
                         results.getString("text")
             ));
 
@@ -329,6 +323,16 @@ public class Access {
         return balanceOverview;
     }
 
+
+
+    public static void main(String[] args) {
+        try {
+
+            System.out.println(getTheInstance().getBalanceList());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 
 
