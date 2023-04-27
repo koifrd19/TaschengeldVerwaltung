@@ -6,6 +6,7 @@
     <title>Stammdaten</title>
     <link rel='stylesheet' href='../css/bulma.css'>
     <link rel='stylesheet' href='../css/general.css'>
+    <script src='../script/javascript.js'></script>
     <style>
         .dropdown {
             position: absolute;
@@ -33,7 +34,7 @@
         }
     </style>
 </head>
-<body>
+<body onload='loadTrunkData();'>
     <!-- Header der Seite -->
     <section class='hero'>
         <div class='columns is-variable is-3 is-centered generalHeader'>
@@ -82,7 +83,7 @@
     <!-- Daten-Eingaben -->
     <br /><br />
     <section>
-        <div class='title'>Bewohner Daten:</div>
+        <div class='title' id='div-alle-daten'>Bewohner Daten:</div>
         <div class='columns is-centered'>
             <div class='column is-10 columns is-multiline' style='border-style: solid; border-radius: 2px;'>
                 <div class='column is-2'>Vorname:</div>
@@ -112,6 +113,10 @@
                 <div class='column is-2'>Geburtsdatum:</div>
                 <div class='column is-10'>
                     <input class='input' id='B-dateofbirth'>
+                </div>
+                <div class='column is-2'>Austrittsdatum:</div>
+                <div class='column is-10'>
+                    <input class='input' id='B-dateofexit'>
                 </div>
                 <div class='column is-2'>Notiz:</div>
                 <div class='column is-10'>
