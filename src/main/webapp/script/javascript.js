@@ -117,13 +117,14 @@ function loadTrunkData() {
 function displayTrunkData(villager) {
     console.log(villager);
 
-    document.getElementById('div-alle-daten').innerHTML = `class='columns is-centered' id='div-alle-daten' name='${villager.id}'`;
+    document.getElementById('div-alle-daten').setAttribute('name', villager.id);
 
     document.getElementById('B-firstname').value = villager.firstName;
     document.getElementById('B-lastname').value = villager.lastName;
     document.getElementById('B-shortsign').value = villager.shortSign;
     document.getElementById('B-titlepre').value = villager.titleBefore;
     document.getElementById('B-titlesuf').value = villager.titleAfter;
+    // TODO: Als Dropdown
     document.getElementById('B-salutation').value = villager.salutation.salutation;
     document.getElementById('B-dateofbirth').value = villager.dateOfBirth;
     document.getElementById('B-dateofexit').value = villager.dateOfExit;
@@ -145,7 +146,12 @@ function displayTrunkData(villager) {
 
 function saveTrunkData() {
     const villagerPerson = {
-
+        id: document.getElementById('div-alle-daten').getAttribute('name'),
+        firstName: document.getElementById('B-firstname').value,
+        lastName: document.getElementById('B-lastname').value,
+        titleBefore: document.getElementById('B-titlepre').value,
+        titleAfter: document.getElementById('B-titlesuf').value,
+        salutation: {}
     }
 }
 // --- villager_history.html
