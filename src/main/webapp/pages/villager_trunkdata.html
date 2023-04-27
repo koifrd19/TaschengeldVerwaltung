@@ -28,8 +28,29 @@
             text-decoration: none;
             display: block;
         }
-
         .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-anrede {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content-anrede {
+            display: none;
+            position: absolute;
+            z-index: 1;
+        }
+
+        .dropdown-content-anrede a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-anrede:hover .dropdown-content-anrede {
             display: block;
         }
     </style>
@@ -112,7 +133,14 @@
                 </div>
                 <div class='column is-2'>Geburtsdatum:</div>
                 <div class='column is-10'>
-                    <input class='input' id='B-dateofbirth'>
+                    <div class="dropdown-anrede">
+                        <button class="dropbtn">Anrede</button>
+                        <div class="dropdown-content-anrede">
+                            <a href="#" onclick="b_selectOption('Herr')">Herr</a>
+                            <a href="#" onclick="b_selectOption('Frau')">Frau</a>
+                            <!-- more options here-->
+                        </div>
+                    </div>
                 </div>
                 <div class='column is-2'>Austrittsdatum:</div>
                 <div class='column is-10'>
@@ -150,7 +178,14 @@
                 </div>
                 <div class='column is-2'>Anrede:</div>
                 <div class='column is-10'>
-                    <input class='input' id='V-salutation'>
+                    <div class="dropdown-anrede">
+                        <button class="dropbtn">Anrede</button>
+                        <div class="dropdown-content-anrede">
+                            <a href="#" onclick="v_selectOption('Herr')">Herr</a>
+                            <a href="#" onclick="v_selectOption('Frau')">Frau</a>
+                            <!--more options here-->
+                        </div>
+                    </div>
                 </div>
                 <div class='column is-2'>Relation:</div>
                 <div class='column is-10'>
