@@ -35,7 +35,7 @@ public class Access {
         List<VillagerPerson> villagerPeople = new ArrayList<>();
 
         String sqlString = "SELECT * FROM \"villager\" \"be\" INNER JOIN \"person\" \"pers\" ON be.\"villager_id\" = pers.\"person_id\"\n" +
-                "                            INNER JOIN \"salutation\" \"anr\" ON pers.\"salutation_id\" = anr.\"salutation_id\";";
+                "                            INNER JOIN \"salutation\" \"anr\" ON pers.\"salutation_id\" = anr.\"salutation_id\" ORDER BY be.\"villager_id\";";
 
         ResultSet results = statement.executeQuery(sqlString);
 

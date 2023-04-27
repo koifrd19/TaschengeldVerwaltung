@@ -1,8 +1,8 @@
 /**@Author Marcus Schweighofer (cooler smiler)*/
 
 // wenn nicht angemeldet automatisch hacker!!
-
-const BASE_URL = 'http://192.168.204.146:8080/taschengeldverwaltung-1.0-SNAPSHOT/api/villager';
+// 192.168.209.241
+const BASE_URL = 'http://localhost:8080/taschengeldverwaltung/api/villager';
 
 // FEHLT IM BACKEND!!!!
 
@@ -43,7 +43,7 @@ function loadOverview() {
 function displayOverview(villagers) {
     let html = '<tr><th></th><th>Vorname</th><th>Nachname</th><th>K?rzel</th><th>Kontostand</th><th>Buchungsverlauf</th></tr>';
     for (const villager in villagers) {
-        html += `<tr><td>${villagers[villager].id}</td><td>${villagers[villager].firstName}</td><td>${villagers[villager].lastName}</td><td>${villagers[villager].shortSign}</td><td>${villagers[villager].balance}</td><td><a href='./villager_history.html?id=${villagers[villager].id}'>Buchungsverlauf</a></td></tr>`;
+        html += `<tr><td><a href='/taschengeldverwaltung/pages/villager_trunkdata.html?id=${villagers[villager].id}'>${villagers[villager].id}</a></td><td>${villagers[villager].firstName}</td><td>${villagers[villager].lastName}</td><td>${villagers[villager].shortSign}</td><td>${villagers[villager].balance}</td><td><a href='./villager_history.html?id=${villagers[villager].id}'>Buchungsverlauf</a></td></tr>`;
     }
     document.getElementById('uebersichtTabelle').innerHTML = html;
 };
@@ -98,11 +98,13 @@ function fastBooking() {
 // --- villager_trunkdata.html
 // TODO: Villager id wird ?ber query parameter ?bergeben (?)
 function loadTrunkData() {
-    fetch(BASE_URL + '/getVillager')
+    const villagerId = window.location.pathname.substring(window.location.pathname.indexOf('=') + 1);
+    fetch(BASE_URL + '/getVillager?personId=' + villagerId)
         .then(res => {
             if (!res.ok) {
                 throw Error("HTTP-error: " + res.status);
             }
+            console.log(res.json());
             return res.json();
         })
         .then(villager => {
