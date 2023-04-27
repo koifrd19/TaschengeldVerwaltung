@@ -1,14 +1,14 @@
 <component name="ArtifactManager">
-  <artifact type="war" name="TaschengeldVerwaltung:war">
+  <artifact type="war" name="taschengeldverwaltung:war">
     <output-path>$PROJECT_DIR$/target</output-path>
     <properties id="maven-jee-properties">
       <options>
-        <module>TaschengeldVerwaltung</module>
+        <module>taschengeldverwaltung</module>
         <packaging>war</packaging>
       </options>
     </properties>
     <root id="archive" name="taschengeldverwaltung-1.0-SNAPSHOT.war">
-      <element id="artifact" artifact-name="TaschengeldVerwaltung:war exploded" />
+      <element id="artifact" artifact-name="taschengeldverwaltung:war exploded" />
     </root>
   </artifact>
 </component>
