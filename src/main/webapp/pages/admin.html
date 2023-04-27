@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width-device-width, initial-scale-1'>
+    <title>admin</title>
+    <link rel='stylesheet' href='../css/bulma.css'>
+    <link rel='stylesheet' href='../css/general.css'>
+    <script src='../script/javascript.js'></script>
+    <style>
+        .dropdown {
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+<!-- Header der Seite -->
+<section class='hero'>
+    <div class='columns is-variable is-3 is-centered generalHeader'>
+        <div id='ubersichtHeader' class='column is-2 unselected-header' onclick=''>
+            <a href='./overview.html'>
+                Übersicht
+            </a>
+        </div>
+        <div id='buchHeader' class='column is-2 selected-header'>
+            <p>
+                Buchungen
+            </p>
+        </div>
+    </div>
+</section>
+<div style='position: absolute; top:3px; left:3px;'>
+    <img src='../resources/logo.png'>
+</div>
+<!-- User Drop-Down -->
+<div class="dropdown">
+    <button class="dropbtn">Benutzerverwaltung</button>
+    <div class="dropdown-content">
+        <a href="#">Admin-Bereich</a>
+        <a href="#">Abmelden</a>
+    </div>
+</div>
+
+<!-- Content der Seite -->
+</br></br></br>
+<section>
+    <h1>Adminbereich</h1>
+    </br></br>
+    <div class="columns is-variable is-centered">
+        <div class="column is-10 columns" style="background-color: rgb(227, 216, 216);">
+
+            <div class="column is-5 " style="background-color: rgb(182, 141, 141);">
+                <center>
+                    <div class="dropdown">
+                        <button class="dropdown-toggle generalButton" style="width: 30vw; height: 100%;">Zwecke aktivieren</button>
+                        <div class="dropdown-content">
+                            <label>
+                                <input type="checkbox">
+                                Eis essen
+                            </label>
+                            <label>
+                                <input type="checkbox">
+                                Option 2
+                            </label>
+                            <label>
+                                <input type="checkbox">
+                                Option 3
+                            </label>
+                            <!-- Add more options as needed -->
+                        </div>
+                    </div>
+                </center>
+            </div>
+            <div class="column is-2"></div>
+            <div class="column is-5" style="background-color: rgb(182, 141, 141);">
+                <input id="newZweck" type="text"/>
+                <button class="generalButton" style="width: 40%; height: 100%;" onclick="">
+                    Zweck Hinzufügen
+                </button>
+            </div>
+        </div>
+    </div>
+    </br>
+    <button class="generalButton" style="width: 100%; height: 100%;" onclick="">
+        DB BACKUP
+    </button>
+    </br></br></br>
+
+    <div class="columns is-centered">
+        <div class="column is-10" style="background-color: rgb(227, 216, 216);">
+            <div class="column is-12">
+                <h1>Benutzer verwalten</h1>
+            </div>
+            <div class="columns is-10 is-offset-1" style="background-color: rgb(185, 178, 178);">
+                <table style="width: 100%;">
+                    <tr><td><input type="text" placeholder="max" style="width: 100%;"/></td><td><input type="text" placeholder="1234" style="width: 100%;"/></td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    </br>
+    <div class="columns is-centered">
+        <div class="column is-3" style="background-color: rgb(227, 216, 216);">
+            <input type="text" placeholder="username" style="width: 100%;"/>
+        </div>
+        <div class="column is-1"></div>
+
+        <div class="column is-3" style="background-color: rgb(227, 216, 216);">
+            <input type="text" placeholder="password" style="width: 100%;"/>
+        </div>
+        <div class="column is-1"></div>
+
+        <div class="columns is-3" style="background-color: rgb(227, 216, 216);">
+            <button class="generalButton" style="width: 100%; height: 100%;">SPEICHERN</button>
+        </div>
+    </div>
+</section>
+</body>
+</html>
