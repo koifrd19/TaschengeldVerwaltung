@@ -41,11 +41,18 @@ function loadOverview() {
 
 // TODO: Kontostand fehlt im Backend + Wo soll weiterleitung zu Stammdaten sein (echt firstname??)
 function displayOverview(villagers) {
-    let html = '<tr><th></th><th>Vorname</th><th>Nachname</th><th>K?rzel</th><th>Kontostand</th><th>Buchungsverlauf</th></tr>';
+    let html = '<tr><th></th><th>Vorname</th><th>Nachname</th><th>Kürzel</th><th>Kontostand</th><th>Buchungsverlauf</th></tr>';
     for (const villager in villagers) {
         html += `<tr><td><a href='/taschengeldverwaltung/pages/villager_trunkdata.html?id=${villagers[villager].id}'>${villagers[villager].id}</a></td><td>${villagers[villager].firstName}</td><td>${villagers[villager].lastName}</td><td>${villagers[villager].shortSign}</td><td>${villagers[villager].balance}</td><td><a href='./villager_history.html?id=${villagers[villager].id}'>Buchungsverlauf</a></td></tr>`;
     }
     document.getElementById('uebersichtTabelle').innerHTML = html;
+};
+
+function addVillager() {
+    window.location.replace(
+        window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/')) +
+        '/villager_trunkdata.html?id=-1'
+    );
 };
 
 // --- history.html
@@ -55,6 +62,7 @@ function loadHistory() {
             if (!res.ok) {
                 throw Error("HTTP-error: " + res.status);
             }
+            console.log(res.json());
             return res.json();
         })
         .then(bookings => {
@@ -70,7 +78,7 @@ function displayHistory(bookings) {
     // TODO: Zweck als Dropdown?
     let html = `<tr><th></th><th>K?rzel</th><th>BuchungsNR</th><th>Zweck</th><th>Anmerkung</th><th>Betrag</th><th>Kontostand</th></tr><tr><td><button onclick='fastBooking()'>Schnellbuchung:</button></td><td><input class='input' id='kuerzel'></td><td><input class='input' id='buchungsNR'></td><td><input class='input' id='zweck'></td><td><input class='input' id='anmerkung'></td><td><input class='input' id='betrag'></td><td></td></tr>`;
     for (booking in bookings) {
-        html += `<tr><td></td><td>${booking.shortSign}</td><td>${booking.receiptNumber}</td><td>${booking.purpose}</td><td>${booking.note}</td><td>${booking.value}</td><td>KONTOSTAND</td></tr>`;
+        html += `<tr><td></td><td>${bookings[booking].shortSign}</td><td>${bookings[booking].receiptNumber}</td><td>${bookings[booking].purpose}</td><td>${bookings[booking].note}</td><td>${bookings[booking].value}</td><td>KONTOSTAND</td></tr>`;
     }
     document.getElementById('buchTabelle').innerHTML = html;
 }
@@ -96,9 +104,11 @@ function fastBooking() {
 }
 
 // --- villager_trunkdata.html
-// TODO: Villager id wird ?ber query parameter ?bergeben (?)
 function loadTrunkData() {
     const villagerId = window.location.search.substring(window.location.search.indexOf("="));
+    if (villagerId == '=-1') {
+        return;
+    }
     fetch(BASE_URL + '/getVillager?personId' + villagerId)
         .then(res => {
             if (!res.ok) {
@@ -132,7 +142,6 @@ function displayTrunkData(villager) {
 
     document.getElementById('V-firstname').value = villager.trustedPerson.firstName;
     document.getElementById('V-lastname').value = villager.trustedPerson.lastName;
-    document.getElementById('V-shortsign').value = villager.trustedPerson.shortSign;
     document.getElementById('V-titlepre').value = villager.trustedPerson.titleBefore;
     document.getElementById('V-titlesuf').value = villager.trustedPerson.titleAfter;
     document.getElementById('V-salutation').value = villager.trustedPerson.salutation.salutation;
