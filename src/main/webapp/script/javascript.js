@@ -98,14 +98,12 @@ function fastBooking() {
 // --- villager_trunkdata.html
 // TODO: Villager id wird ?ber query parameter ?bergeben (?)
 function loadTrunkData() {
-    console.log(window.location.search);
-    const villagerId = window.location.pathname.substring(5);
-    fetch(BASE_URL + '/getVillager?personId=' + villagerId)
+    const villagerId = window.location.search.substring(window.location.search.indexOf("="));
+    fetch(BASE_URL + '/getVillager?personId' + villagerId)
         .then(res => {
             if (!res.ok) {
                 throw Error("HTTP-error: " + res.status);
             }
-            console.log(res.json());
             return res.json();
         })
         .then(villager => {
@@ -117,18 +115,35 @@ function loadTrunkData() {
 }
 
 function displayTrunkData(villager) {
-    document.getElementById('B-firstname').innerText = villager.firstName;
-    document.getElementById('B-lastname').innerText = villager.lastName;
-    document.getElementById('B-shortsign').innerText = villager.shortSign;
-    document.getElementById('B-titlepre').innerText = villager.titleBefore;
-    document.getElementById('B-titlesuf').innerText = villager.titleAfter;
-    document.getElementById('B-salutation').innerText = villager.salutation;
-    document.getElementById('B-dateofbirth').innerText = villager.dateOfBirth;
-    document.getElementById('B-note').innerText = villager.note;
+    console.log(villager);
+    document.getElementById('B-firstname').value = villager.firstName;
+    document.getElementById('B-lastname').value = villager.lastName;
+    document.getElementById('B-shortsign').value = villager.shortSign;
+    document.getElementById('B-titlepre').value = villager.titleBefore;
+    document.getElementById('B-titlesuf').value = villager.titleAfter;
+    document.getElementById('B-salutation').value = villager.salutation.salutation;
+    document.getElementById('B-dateofbirth').value = villager.dateOfBirth;
+    document.getElementById('B-dateofexit').value = villager.dateOfExit;
+    document.getElementById('B-note').value = villager.note;
+
+    document.getElementById('V-firstname').value = villager.trustedPerson.firstName;
+    document.getElementById('V-lastname').value = villager.trustedPerson.lastName;
+    document.getElementById('V-shortsign').value = villager.trustedPerson.shortSign;
+    document.getElementById('V-titlepre').value = villager.trustedPerson.titleBefore;
+    document.getElementById('V-titlesuf').value = villager.trustedPerson.titleAfter;
+    document.getElementById('V-salutation').value = villager.trustedPerson.salutation.salutation;
+
+    document.getElementById('V-email').value = villager.trustedPerson.email;
+    document.getElementById('V-town').value = villager.trustedPerson.town;
+    document.getElementById('V-zipcode').value = villager.trustedPerson.zipCode;
+    document.getElementById('V-street').value = villager.trustedPerson.street;
+    document.getElementById('V-housenr').value = villager.trustedPerson.houseNr;
 }
 
 function saveTrunkData() {
+    const villagerPerson = {
 
+    }
 }
 // --- villager_history.html
 function loadVillagerHistory() {
