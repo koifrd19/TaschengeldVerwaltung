@@ -98,7 +98,8 @@ function fastBooking() {
 // --- villager_trunkdata.html
 // TODO: Villager id wird ?ber query parameter ?bergeben (?)
 function loadTrunkData() {
-    const villagerId = window.location.pathname.substring(window.location.pathname.indexOf('=') + 1);
+    console.log(window.location.search);
+    const villagerId = window.location.pathname.substring(5);
     fetch(BASE_URL + '/getVillager?personId=' + villagerId)
         .then(res => {
             if (!res.ok) {
