@@ -58,7 +58,7 @@
         }
     </style>
 </head>
-<body onload='loadTrunkData();'>
+<body onload='changeLinkSoIsCorrect(); loadAllSalutations(); loadAllRelations(); loadTrunkDataVillager(); loadTrunkDataTrusted(); loadAllTransitionMethods();'>
     <!-- Header der Seite -->
     <section class='hero'>
         <div class='columns is-variable is-3 is-centered generalHeader'>
@@ -93,13 +93,13 @@
         <div class='columns is-centered'>
             <div class='column is-6 columns is-centered indiHeader'>
                 <div id='indiHeaderName' class='column is-3'>
-                    <strong style='align-self: center; font-size: large; color:white;'> Max Mustermann: </strong>
+                    <strong style='align-self: center; font-size: large; color:white;' id="strong-name-b"> Max Mustermann: </strong>
                 </div>
                 <div id='indiStammHeader' class='column is-4 unselected-header'>
                     <a id='v-stamm-leitung' href='./villager_trunkdata.html'>Stammdaten</a>
                 </div>
                 <div id='indiBuchHeader' class='column is-4 unselected-header' onclick='buchen()'>
-                    <a href='./villager_history.html'>Buchungen</a>
+                    <a id="v-history-leitung" href='./villager_history.html'>Buchungen</a>
                 </div>
             </div>
         </div>
@@ -108,7 +108,7 @@
     <br /><br />
     <section>
         <div class='title' id='div-alle-daten'>Bewohner Daten:</div>
-        <div class='columns is-centered'>
+        <div class='columns is-centered' id='daten-trust-person'>
             <div class='column is-10 columns is-multiline' style='border-style: solid; border-radius: 2px;'>
                 <div class='column is-2'>Vorname:</div>
                 <div class='column is-10'>
@@ -187,7 +187,7 @@
                         </div>
                     </div>
                 </div>
-                <div class='column is-2'>Relation:</div>
+                <div class='column is-2'>Beziehung:</div>
                 <div class='column is-10'>
                     <div class="dropdown-anrede">
                         <button class="dropbtn" id="V-relation-button">Beziehung</button>
@@ -198,6 +198,17 @@
                         </div>
                     </div>
                 </div>
+
+                <div class='column is-2'>Kontakmethode:</div>
+                <div class='column is-10'>
+                    <div class="dropdown-anrede">
+                        <button class="dropbtn" id="V-method-button">Methode</button>
+                        <div class="dropdown-content-anrede" id='V-dropdown-method'>
+                            <!--more options here-->
+                        </div>
+                    </div>
+                </div>
+
                 <div class='column is-12'>
                     <strong><center>Kontaktiformationen</center></strong>
                 </div>
@@ -230,7 +241,7 @@
         </div>
         <div class='columns'>
             <div class='column is-1'></div>
-            <div class='column is-3 button has-background-grey-lighter' onclick='saveStammdaten(" + kuerzel + ")'>speichern</div>
+            <div class='column is-3 button has-background-grey-lighter' onclick='saveTrunkData();'>speichern</div>
         </div>
     </section>
     <!-- Export Drop-Up -->
