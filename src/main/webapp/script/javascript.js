@@ -41,9 +41,9 @@ function loadOverview() {
 
 // TODO: Kontostand fehlt im Backend + Wo soll weiterleitung zu Stammdaten sein (echt firstname??)
 function displayOverview(villagers) {
-    let html = '<tr><th></th><th>Vorname</th><th>Nachname</th><th>Kürzel</th><th>Kontostand</th><th>Buchungsverlauf</th></tr>';
+    let html = '<tr><th></th><th>Vorname</th><th>Nachname</th><th>Kürzel</th><th>Kontostand</th></tr>';
     for (const villager in villagers) {
-        html += `<tr><td><a href='/taschengeldverwaltung/pages/villager_trunkdata.html?id=${villagers[villager].id}'>${villagers[villager].id}</a></td><td>${villagers[villager].firstName}</td><td>${villagers[villager].lastName}</td><td>${villagers[villager].shortSign}</td><td>${villagers[villager].balance}</td><td><a href='./villager_history.html?id=${villagers[villager].id}'>Buchungsverlauf</a></td></tr>`;
+        html += `<tr><td><a href='/taschengeldverwaltung/pages/villager_trunkdata.html?id=${villagers[villager].id}'>${villagers[villager].id}</a></td><td>${villagers[villager].firstName}</td><td>${villagers[villager].lastName}</td><td>${villagers[villager].shortSign}</td><td>${villagers[villager].balance}</td></tr>`;
     }
     document.getElementById('uebersichtTabelle').innerHTML = html;
 };
@@ -185,3 +185,29 @@ function loadVillagerHistory() {
 function villagerFastBooking() {
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

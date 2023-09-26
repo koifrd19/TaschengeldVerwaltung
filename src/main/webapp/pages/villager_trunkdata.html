@@ -15,6 +15,7 @@
         }
 
         .dropdown-content {
+            background-color: white;
             display: none;
             position: absolute;
             top: 100%;
@@ -23,6 +24,7 @@
         }
 
         .dropdown-content a {
+            background-color: white;
             color: black;
             padding: 12px 16px;
             text-decoration: none;
@@ -44,6 +46,7 @@
         }
 
         .dropdown-content-anrede a {
+            background-color: white;
             color: black;
             padding: 12px 16px;
             text-decoration: none;
@@ -92,8 +95,8 @@
                 <div id='indiHeaderName' class='column is-3'>
                     <strong style='align-self: center; font-size: large; color:white;'> Max Mustermann: </strong>
                 </div>
-                <div id='indiStammHeader' class='column is-4 selected-header'>
-                    <p>Stammdaten</p>
+                <div id='indiStammHeader' class='column is-4 unselected-header'>
+                    <a id='v-stamm-leitung' href='./villager_trunkdata.html'>Stammdaten</a>
                 </div>
                 <div id='indiBuchHeader' class='column is-4 unselected-header' onclick='buchen()'>
                     <a href='./villager_history.html'>Buchungen</a>
@@ -129,19 +132,20 @@
                 </div>
                 <div class='column is-2'>Anrede:</div>
                 <div class='column is-10'>
-                    <input class='input' id='B-salutation'>
-                </div>
-                <div class='column is-2'>Geburtsdatum:</div>
-                <div class='column is-10'>
                     <div class="dropdown-anrede">
-                        <button class="dropbtn">Anrede</button>
-                        <div class="dropdown-content-anrede">
-                            <a href="#" onclick="b_selectOption('Herr')">Herr</a>
-                            <a href="#" onclick="b_selectOption('Frau')">Frau</a>
+                        <button class="dropbtn" id="B-anrede-button">Anrede</button>
+                        <div class="dropdown-content-anrede" id='B-dropdown-anrede'>
+                            <a onclick="b_selectSalutation('Herr')">Herr</a>
+                            <a onclick="b_selectSalutation('Frau')">Frau</a>
                             <!-- more options here-->
                         </div>
                     </div>
                 </div>
+                <div class='column is-2'>Geburtsdatum:</div>
+                <div class='column is-10'>
+                    <input class='input' id='B-dateofbirth'>
+                </div>
+
                 <div class='column is-2'>Austrittsdatum:</div>
                 <div class='column is-10'>
                     <input class='input' id='B-dateofexit'>
@@ -175,17 +179,24 @@
                 <div class='column is-2'>Anrede:</div>
                 <div class='column is-10'>
                     <div class="dropdown-anrede">
-                        <button class="dropbtn">Anrede</button>
-                        <div class="dropdown-content-anrede">
-                            <a href="#" onclick="v_selectOption('Herr')">Herr</a>
-                            <a href="#" onclick="v_selectOption('Frau')">Frau</a>
+                        <button class="dropbtn" id="V-anrede-button">Anrede</button>
+                        <div class="dropdown-content-anrede" id='V-dropdown-anrede'>
+                            <a href="#" onclick="v_selectSalutation('Herr')">Herr</a>
+                            <a href="#" onclick="v_selectSalutation('Frau')">Frau</a>
                             <!--more options here-->
                         </div>
                     </div>
                 </div>
                 <div class='column is-2'>Relation:</div>
                 <div class='column is-10'>
-                    <input class='input' id='V-relation'>
+                    <div class="dropdown-anrede">
+                        <button class="dropbtn" id="V-relation-button">Beziehung</button>
+                        <div class="dropdown-content-anrede" id='V-dropdown-relation'>
+                            <a href="#" onclick="v_selectRelation('Sohn')">Sohn</a>
+                            <a href="#" onclick="v_selectRelation('Tochter')">Tochter</a>
+                            <!--more options here-->
+                        </div>
+                    </div>
                 </div>
                 <div class='column is-12'>
                     <strong><center>Kontaktiformationen</center></strong>
@@ -193,6 +204,10 @@
                 <div class='column is-2'>E-Mail:</div>
                 <div class='column is-10'>
                     <input class='input' id='V-email'>
+                </div>
+                <div class='column is-2'>Telefonnummer:</div>
+                <div class='column is-10'>
+                    <input class='input' id='V-telephone'>
                 </div>
                 <div class='column is-2'>Stadt:</div>
                 <div class='column is-10'>
@@ -220,5 +235,8 @@
     </section>
     <!-- Export Drop-Up -->
     <div class='button generalButton' style='position: fixed; bottom:20px; right:10px; width:150px; height:40px;'>Depotauskunft</div>
+    </br>
+    </br>
+    </br>
 </body>
 </html>

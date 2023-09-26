@@ -33,14 +33,14 @@
         }
     </style>
 </head>
-<body>
+<body onload="changeLinkSoIsCorrect(); loadTrunkDataVillager(); loadVillagerHistory();">
 <!-- Header der Seite -->
 <section class='hero'>
     <div class='columns is-variable is-3 is-centered generalHeader'>
         <div id='ubersichtHeader' class='column is-2 selected-header' onclick=''>
-            <p>
+            <a href='./overview.html'>
                 Übersicht
-            </p>
+            </a>
         </div>
         <div id='buchHeader' class='column is-2 unselected-header'>
             <a href='./history.html'>
@@ -79,10 +79,10 @@
                     <strong style='align-self: center; font-size: large; color:white;'> Max Mustermann: </strong>
                 </div>
                 <div id='indiStammHeader' class='column is-4 unselected-header'>
-                    <a href='./villager_trunkdata.html'>Stammdaten</a>
+                    <a id='v-stamm-leitung' href='./villager_trunkdata.html'>Stammdaten</a>
                 </div>
-                <div id='indiBuchHeader' class='column is-4 selected-header' onclick='buchen()'>
-                    <p>Buchungen</p>
+                <div id='indiBuchHeader' class='column is-4 unselected-header' onclick='buchen()'>
+                    <a id="v-history-leitung" href='./villager_history.html'>Buchungen</a>
                 </div>
             </div>
         </div>
