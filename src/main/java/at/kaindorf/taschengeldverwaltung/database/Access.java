@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 public class Access {
 
     public static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    public static final DateTimeFormatter DTF_date = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     private static Access theInstance;
 
@@ -30,17 +31,24 @@ public class Access {
         return theInstance;
     }
 
-    public List<VillagerPerson> getAllVillagers() throws SQLException {
+    public List<BalanceVillagerPerson> getAllVillagers() throws SQLException {
         Statement statement = dbInstance.getStatement();
-        List<VillagerPerson> villagerPeople = new ArrayList<>();
+        List<BalanceVillagerPerson> villagerPeople = new ArrayList<>();
 
-        String sqlString = "SELECT * FROM \"villager\" \"be\" INNER JOIN \"person\" \"pers\" ON be.\"villager_id\" = pers.\"person_id\"\n" +
-                "                            INNER JOIN \"salutation\" \"anr\" ON pers.\"salutation_id\" = anr.\"salutation_id\" ORDER BY be.\"villager_id\";";
+        String sqlString = "SELECT v.villager_id, p.firstname, p.lastname, p.title_before, p.title_after, p.salutation_id, s.salutation_text, \n" +
+                "\t\tv.short_sign, v.date_of_birth, v.date_of_exit, v.note, SUM(amount) AS balance\n" +
+                "FROM villager v\n" +
+                "\tINNER JOIN person p ON v.villager_id = p.person_id\n" +
+                "\tINNER JOIN salutation s ON p.salutation_id = s.salutation_id\n" +
+                "\tINNER JOIN booking b ON b.villager_id = p.person_id\n" +
+                "GROUP BY v.villager_id, p.firstname, p.lastname, p.title_before, p.title_after, p.salutation_id, s.salutation_text, \n" +
+                "\t\tv.short_sign, v.date_of_birth, v.date_of_exit, v.note\n" +
+                "ORDER BY v.villager_id;";
 
         ResultSet results = statement.executeQuery(sqlString);
 
         while (results.next()){
-            villagerPeople.add(new VillagerPerson(results.getLong("villager_id"),
+            villagerPeople.add(new BalanceVillagerPerson(results.getLong("villager_id"),
                     results.getString("firstname"),
                     results.getString("lastname"),
                     results.getString("title_before"),
@@ -50,21 +58,25 @@ public class Access {
                     results.getDate("date_of_birth").toLocalDate(),
                     results.getDate("date_of_exit").toLocalDate(),
                     results.getString("note"),
-                    new Person(results.getLong("trusted_person")),
-                    new ArrayList<>()));
+                    results.getDouble("balance")));
         }
         dbInstance.releaseStatement(statement);
         return villagerPeople;
     }
-    public TrustedPerson getPersonOfTrustById(Long id) throws SQLException {
+    public TrustedPerson getPersonOfTrustByVillagerId(Long id) throws SQLException {
         Statement statement = dbInstance.getStatement();
 
         String sqlString = "SELECT *\n" +
-                "FROM \"person\" p INNER JOIN \"trusted_person\" vp ON p.\"person_id\" = vp.\"trusted_person_id\"\n" +
-                "                INNER JOIN \"transmission_method\" v ON vp.\"transmission_method\" = v.\"transmission_method_id\"\n" +
-                "                INNER JOIN \"relation\" b ON vp.\"relation\" = b.\"relation_id\"" +
-                "                INNER JOIN \"salutation\" a ON p.\"salutation_id\" = a.\"salutation_id\"" +
-                "WHERE p.\"person_id\" = "+ id+ ";\n";
+                "FROM person p \n" +
+                "\tINNER JOIN trusted_person tp ON p.person_id = tp.trusted_person_id\n" +
+                "\tINNER JOIN transmission_method tm ON tp.transmission_method = tm.transmission_method_id\n" +
+                "\tINNER JOIN relation re ON tp.relation = re.relation_id\n" +
+                "\tINNER JOIN salutation s ON p.salutation_id = s.salutation_id\n" +
+                "WHERE p.person_id = (\n" +
+                "\tSELECT trusted_person\n" +
+                "\tFROM person pp INNER JOIN villager v ON pp.person_id = v.villager_id\n" +
+                "\tWHERE person_id = 455\n" +
+                ");";
 
         ResultSet results = statement.executeQuery(sqlString);
 
@@ -105,7 +117,7 @@ public class Access {
 
         String sqlString = "SELECT * FROM person p INNER JOIN villager vp ON p.person_id = vp.villager_id\n" +
                 "INNER JOIN salutation a ON p.salutation_id = a.salutation_id\n" +
-                "WHERE p.person_id = 187;";
+                "WHERE p.person_id = "+ id+ ";";
 
         ResultSet results = statement.executeQuery(sqlString);
 
@@ -123,13 +135,36 @@ public class Access {
                 results.getDate("date_of_birth").toLocalDate(),
                 results.getDate("date_of_exit").toLocalDate(),
                 results.getString("note"),
-                new Person(results.getLong("person_id")), // TODO: change to person of trust
-                new ArrayList<>()
+                new Person(results.getLong("person_id"))
                 );
     }
 
+    /*ToDo: */
     public Booking getBookingById(){
+
         return null;
+    }
+
+
+    public void updateVillager(VillagerPerson vp) throws SQLException {
+        Statement statement = dbInstance.getStatement();
+
+        String personSQL = String.format("UPDATE person\n" +
+                "\tSET person_id=%d, firstname='%s', lastname='%s', salutation_id=%d, title_before='%s', title_after='%s'\n" +
+                "\tWHERE person_id = %d;" ,vp.getId(), vp.getFirstName(), vp.getLastName(), vp.getSalutation().getId(),
+                vp.getTitleBefore(), vp.getTitleAfter(), vp.getId());
+
+        System.out.println(personSQL);
+
+        String villagerSQL = String.format("UPDATE villager\n" +
+                "\tSET villager_id=%d, short_sign='%s', date_of_birth='%s', date_of_exit='%s', note='%s', trusted_person=%d\n" +
+                "\tWHERE villager_id = %d;", vp.getId(), vp.getShortSign(), vp.getDateOfBirth().format(DTF_date), vp.getDateOfExit().format(DTF_date), vp.getNote(), vp.getTrustedPerson().getId(), vp.getId());
+
+        System.out.println(villagerSQL);
+        statement.execute(villagerSQL);
+        statement.execute(personSQL);
+
+        dbInstance.releaseStatement(statement);
     }
 
     public List<Booking> getVillagerBookingHistory(Long personId) throws SQLException {
@@ -323,16 +358,119 @@ public class Access {
         return balanceOverview;
     }
 
+    public List<Salutation> getAllSalutations() throws SQLException {
+        String sqlString = "SELECT * FROM salutation;";
 
+        Statement statement = dbInstance.getStatement();
 
-    public static void main(String[] args) {
-        try {
-
-            System.out.println(getTheInstance().getBalanceList());
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        ResultSet results = statement.executeQuery(sqlString);
+        List<Salutation> salutations = new ArrayList<>();
+        while (results.next()){
+            salutations.add(new Salutation(results.getLong("salutation_id"),
+                    results.getString("salutation_text")));
         }
+        dbInstance.releaseStatement(statement);
+        return salutations;
     }
+
+    public List<Relation> getAllRelations() throws SQLException {
+        String sqlString = "SELECT * FROM relation;";
+
+        Statement statement = dbInstance.getStatement();
+
+        ResultSet results = statement.executeQuery(sqlString);
+        List<Relation> relations = new ArrayList<>();
+        while (results.next()){
+            relations.add(new Relation(results.getLong("relation_id"),
+                    results.getString("relation")));
+        }
+        dbInstance.releaseStatement(statement);
+        return relations;
+    }
+
+    public List<Purpose> getAllPurposes() throws SQLException {
+        String sqlString = "SELECT * FROM purpose;";
+
+        Statement statement = dbInstance.getStatement();
+
+        ResultSet results = statement.executeQuery(sqlString);
+        List<Purpose> purposes = new ArrayList<>();
+        while (results.next()){
+            purposes.add(new Purpose(results.getLong("purpose_id"),
+                    results.getString("text"),
+                    results.getShort("multiplier"),
+                    results.getBoolean("status")));
+        }
+        dbInstance.releaseStatement(statement);
+        return purposes;
+    }
+
+    public List<TransmissionMethod> getAllTransmissionMethods() throws SQLException {
+        String sqlString = "SELECT * FROM transmission_method;";
+
+        Statement statement = dbInstance.getStatement();
+
+        ResultSet results = statement.executeQuery(sqlString);
+        List<TransmissionMethod> methods = new ArrayList<>();
+        while (results.next()){
+            methods.add(new TransmissionMethod(results.getLong("transmission_method_id"),
+                    results.getString("method")));
+        }
+        dbInstance.releaseStatement(statement);
+        return methods;
+    }
+
+    public List<ShortVillager> fastBookingSearch(String pattern) throws SQLException {
+        String sqlString = "SELECT *\n" +
+                "FROM villager v\n" +
+                "\tINNER JOIN person p ON v.villager_id = p.person_id\n" +
+                "WHERE LOWER(v.short_sign) LIKE LOWER('%"+pattern+"%');";
+
+        Statement statement = dbInstance.getStatement();
+
+        ResultSet results = statement.executeQuery(sqlString);
+        List<ShortVillager> shorties = new ArrayList<>();
+        while (results.next()){
+            shorties.add(new ShortVillager(results.getLong("villager_id"),
+                    results.getString("short_sign")));
+        }
+        dbInstance.releaseStatement(statement);
+        return shorties;
+    }
+
+    public void updateTrustedPerson(TrustedPerson tp)  throws SQLException{
+        Statement statement = dbInstance.getStatement();
+
+        String personSQL = String.format("UPDATE person\n" +
+                        "\tSET person_id=%d, firstname='%s', lastname='%s', salutation_id=%d, title_before='%s', title_after='%s'\n" +
+                        "\tWHERE person_id = %d;" ,tp.getId(), tp.getFirstName(), tp.getLastName(), tp.getSalutation().getId(),
+                tp.getTitleBefore(), tp.getTitleAfter(), tp.getId());
+
+        System.out.println(personSQL);
+
+        String trustedPersonSQL = String.format("UPDATE trusted_person\n" +
+                "\tSET trusted_person_id=%d, tel_nr='%s', transmission_method='%d', town='%s', zip_code='%s', street='%s', house_nr='%s', relation=%d, email='%s'\n" +
+                "\tWHERE trusted_person_id=%d;", tp.getId(), tp.getTelNr(), tp.getMethod().getId(), tp.getTown(), tp.getZipCode(), tp.getStreet(), tp.getHouseNr(), tp.getRelation().getId(), tp.getEmail(), tp.getId());
+
+        System.out.println(trustedPersonSQL);
+
+        statement.execute(trustedPersonSQL);
+        statement.execute(personSQL);
+
+        dbInstance.releaseStatement(statement);
+    }
+
+
+//    public static void main(String[] args) {
+//        try {
+//
+//            System.out.println(getTheInstance().getAllSalutations());
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
+
+
 
 
 

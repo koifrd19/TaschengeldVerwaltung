@@ -11,9 +11,6 @@ import java.util.List;
 @Data
 public class BalanceOverview {
 
-
-
-
     private Double sum;
     private Double income;
     private Double expenses;

@@ -165,7 +165,21 @@ function saveTrunkData() {
 }
 // --- villager_history.html
 function loadVillagerHistory() {
-
+    const villagerId = window.location.search.substring(window.location.search.indexOf("=") + 1);
+    fetch(BASE_URL + '/getVillagerBookingHistory?personId='+villagerId)
+        .then(res => {
+            if (!res.ok) {
+                throw Error("HTTP-error: " + res.status);
+            }
+            console.log(res.json());
+            return res.json();
+        })
+        .then(bookings => {
+            displayVillagerHistory(bookings);
+        })
+        .catch(err => {
+            console.log(err);
+        });
 }
 // TODO: vllt zusammenlegen mit fastBooking()
 function villagerFastBooking() {

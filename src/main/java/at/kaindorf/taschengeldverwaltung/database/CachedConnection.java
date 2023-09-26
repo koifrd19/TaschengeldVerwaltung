@@ -22,8 +22,9 @@ public class CachedConnection {
         if(statementQueue.isEmpty()){
             return connection.createStatement();
         }
-
-        return statementQueue.poll();
+        else{
+            return statementQueue.poll();
+        }
     }
 
     public void releaseStatement(Statement statement){
